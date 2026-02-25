@@ -26,7 +26,17 @@ GET /projects/{project_id}/statuses
 Response: TaskStatus[] { id, name, slug, category, color, position }
 ```
 
-Categories: `backlog`, `todo`, `in_progress`, `review`, `done`, `cancelled`
+Categories: `backlog`, `triage`, `todo`, `in_progress`, `review`, `done`, `cancelled`
+
+## Custom Fields
+
+### List Custom Field Definitions
+```
+GET /projects/{project_id}/custom-fields
+Response: CustomFieldDefinition[] { id, project_id, name, slug, field_type, description, options, default_value, is_required, is_visible_to_agents, position, created_at }
+```
+
+field_type: `text` | `number` | `date` | `datetime` | `select` | `multiselect` | `url` | `email` | `checkbox` | `user_ref` | `agent_ref` | `json`
 
 ## Tasks
 
@@ -77,6 +87,38 @@ Response: 204
 ```
 GET /tasks/{task_id}/subtasks
 Response: Task[]
+```
+
+### Get Task Context
+```
+GET /tasks/{task_id}/context
+Response: { task: Task, status: TaskStatus, comments: Comment[], dependencies: Dependency[], artifacts: Artifact[], subtasks: Task[] }
+```
+
+Returns enriched task context in a single call — useful for agents picking up work.
+
+## VCS Links
+
+### List VCS Links
+```
+GET /tasks/{task_id}/vcs-links
+Response: { vcs_links: VCSLink[] }
+```
+
+### Create VCS Link
+```
+POST /tasks/{task_id}/vcs-links
+Body: { link_type, external_id, url, title?, provider? }
+Response: VCSLink { id, task_id, provider, link_type, external_id, url, title, status, metadata, created_at }
+```
+
+link_type: `pr` | `commit` | `branch`
+provider: `github` | `gitlab` (default: `github`)
+
+### Delete VCS Link
+```
+DELETE /vcs-links/{link_id}
+Response: 204
 ```
 
 ## Dependencies
@@ -191,6 +233,14 @@ GET /agents/me
 Response: Agent { id, workspace_id, name, slug, agent_type, status, last_heartbeat, current_task_id, total_tasks_completed, total_errors }
 ```
 
+### Get My Tasks
+```
+GET /agents/me/tasks
+Response: Task[]
+```
+
+Returns all tasks assigned to the current agent across all projects.
+
 ### Heartbeat
 ```
 POST /agents/heartbeat
@@ -241,6 +291,40 @@ Response: Activity[] { id, event_type, actor_id, actor_type, details, created_at
 GET /workspaces/{workspace_id}/activity
 Response: Activity[]
 ```
+
+## Project Updates
+
+### Post Project Update
+```
+POST /projects/{project_id}/updates
+Body: { title, summary, status?, highlights?, blockers?, next_steps? }
+Response: ProjectUpdate { id, project_id, title, status, summary, highlights, blockers, next_steps, metrics, created_by, created_at }
+```
+
+status: `on_track` | `at_risk` | `off_track` | `completed` (default: `on_track`)
+highlights/blockers/next_steps: `[{ text: "..." }, ...]`
+
+### List Project Updates
+```
+GET /projects/{project_id}/updates?page=1&per_page=20
+Response: { items: ProjectUpdate[], total_count, page, per_page, has_more }
+```
+
+### Get Latest Update
+```
+GET /projects/{project_id}/updates/latest
+Response: ProjectUpdate
+```
+
+## Triage
+
+### List Triage Tasks
+```
+GET /workspaces/{workspace_id}/triage?per_page=50
+Response: { items: Task[], total_count, page, per_page, has_more }
+```
+
+Returns tasks with status category `triage` across all projects — unrouted tasks awaiting assignment.
 
 ## Error Responses
 

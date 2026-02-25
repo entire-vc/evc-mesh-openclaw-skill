@@ -50,11 +50,14 @@ bash scripts/heartbeat.sh online
 # List projects
 bash scripts/list-projects.sh <workspace_id>
 
-# List tasks
+# List my assigned tasks (across all projects)
+bash scripts/my-tasks.sh
+
+# List tasks in a project
 bash scripts/list-tasks.sh <project_id>
 
-# Get task details
-bash scripts/get-task.sh <task_id>
+# Get enriched task context (task + deps + comments + artifacts)
+bash scripts/get-context.sh <task_id>
 
 # Move task to a different status
 bash scripts/move-task.sh <task_id> <status_id>
@@ -87,6 +90,13 @@ bash scripts/add-comment.sh <task_id> "Starting implementation"
 | `publish-event.sh` | Publish event to project bus |
 | `list-events.sh` | List project events |
 | `get-activity.sh` | Get task activity log |
+| `my-tasks.sh` | List tasks assigned to current agent |
+| `get-context.sh` | Get enriched task context (task + status + comments + deps + artifacts) |
+| `list-custom-fields.sh` | List custom field definitions for a project |
+| `link-vcs.sh` | Link PR, commit, or branch to a task |
+| `list-vcs-links.sh` | List VCS links on a task |
+| `post-update.sh` | Post project status update |
+| `list-triage.sh` | List triage inbox tasks (unrouted, awaiting assignment) |
 
 ## API Reference
 
