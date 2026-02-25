@@ -1,0 +1,117 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run test:unit
+
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: unit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: entire-vc/evc-mesh
+          path: evc-mesh
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - name: Build MCP server binary
+        run: |
+          cd evc-mesh
+          go build -o ../mcp-server ./cmd/mcp
+      - name: Start test infrastructure
+        run: docker compose -f tests/integration/docker-compose.test.yml up -d
+      - name: Wait for healthy services
+        run: |
+          echo "Waiting for services to be healthy..."
+          sleep 15
+          docker compose -f tests/integration/docker-compose.test.yml ps
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - name: Run integration tests
+        run: npm run test:integration
+        env:
+          MESH_AGENT_KEY: ${{ secrets.TEST_MESH_AGENT_KEY }}
+          MCP_BINARY: ./mcp-server
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: integration
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: entire-vc/evc-mesh
+          path: evc-mesh
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - name: Build API and MCP server
+        run: |
+          cd evc-mesh
+          go build -o ../api-server ./cmd/api
+          go build -o ../mcp-server ./cmd/mcp
+      - name: Start full stack
+        run: docker compose -f tests/integration/docker-compose.test.yml up -d
+      - name: Wait for healthy services
+        run: sleep 15
+      - name: Run migrations
+        run: |
+          cd evc-mesh
+          go install github.com/pressly/goose/v3/cmd/goose@latest
+          goose -dir migrations postgres "postgres://mesh:mesh@localhost:5437/mesh?sslmode=disable" up
+      - name: Seed test data
+        run: |
+          PGPASSWORD=mesh psql -h localhost -p 5437 -U mesh -d mesh -f tests/e2e/fixtures/seed-data.sql
+      - name: Start API server
+        run: |
+          ./api-server &
+          sleep 5
+        env:
+          DB_HOST: localhost
+          DB_PORT: "5437"
+          DB_USER: mesh
+          DB_PASSWORD: mesh
+          DB_NAME: mesh
+          REDIS_HOST: localhost
+          REDIS_PORT: "6383"
+          NATS_URL: nats://localhost:4223
+          S3_ENDPOINT: localhost:9002
+          S3_ACCESS_KEY_ID: minioadmin
+          S3_SECRET_ACCESS_KEY: minioadmin
+          S3_BUCKET: mesh-artifacts
+          PORT: "8005"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - name: Run E2E tests
+        run: npm run test:e2e
+        env:
+          MESH_AGENT_KEY: ${{ secrets.TEST_MESH_AGENT_KEY }}
+          MESH_API_URL: http://localhost:8005
+          MCP_BINARY: ./mcp-server

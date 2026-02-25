@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "evc-mesh": {
+      "command": "evc-mesh-mcp",
+      "args": ["--transport", "stdio"],
+      "env": {
+        "MESH_AGENT_KEY": "${MESH_AGENT_KEY}",
+        "DB_HOST": "localhost",
+        "DB_PORT": "5437",
+        "DB_USER": "mesh",
+        "DB_PASSWORD": "mesh",
+        "DB_NAME": "mesh",
+        "REDIS_HOST": "localhost",
+        "REDIS_PORT": "6383",
+        "NATS_URL": "nats://localhost:4223",
+        "S3_ENDPOINT": "localhost:9002",
+        "S3_ACCESS_KEY_ID": "minioadmin",
+        "S3_SECRET_ACCESS_KEY": "minioadmin",
+        "S3_BUCKET": "mesh-artifacts"
+      }
+    }
+  },
+  "skills": [
+    "evc-mesh",
+    "evc-mesh-events",
+    "evc-mesh-coordination"
+  ]
+}

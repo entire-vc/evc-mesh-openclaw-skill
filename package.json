@@ -1,0 +1,80 @@
+{
+  "name": "@entire-vc/evc-mesh-openclaw-skill",
+  "version": "0.1.0",
+  "description": "OpenClaw skill for EVC Mesh task management platform — teaches AI agents to manage tasks, share context via event bus, and coordinate in multi-agent teams",
+  "license": "MIT",
+  "keywords": [
+    "openclaw",
+    "skill",
+    "evc-mesh",
+    "task-management",
+    "ai-agents",
+    "mcp",
+    "multi-agent",
+    "kanban"
+  ],
+  "homepage": "https://github.com/entire-vc/evc-mesh-openclaw-skill",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/entire-vc/evc-mesh-openclaw-skill.git"
+  },
+  "files": [
+    "skills/",
+    "config/",
+    "examples/",
+    "scripts/"
+  ],
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "vitest run tests/e2e",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.0.0",
+    "yaml": "^2.7.0"
+  },
+  "openclaw": {
+    "skills": [
+      {
+        "name": "evc-mesh",
+        "file": "skills/evc-mesh.md",
+        "description": "Core task lifecycle for EVC Mesh",
+        "category": "productivity",
+        "tags": ["task-management", "kanban", "ai-agents"]
+      },
+      {
+        "name": "evc-mesh-events",
+        "file": "skills/evc-mesh-events.md",
+        "description": "Event bus and context sharing",
+        "category": "collaboration",
+        "tags": ["event-bus", "context", "multi-agent"]
+      },
+      {
+        "name": "evc-mesh-coordination",
+        "file": "skills/evc-mesh-coordination.md",
+        "description": "Multi-agent coordination patterns",
+        "category": "orchestration",
+        "tags": ["multi-agent", "orchestration", "coordination"]
+      }
+    ],
+    "mcpServers": [
+      {
+        "name": "evc-mesh",
+        "configFiles": {
+          "stdio": "config/openclaw-mcp-stdio.json",
+          "sse": "config/openclaw-mcp-sse.json"
+        }
+      }
+    ],
+    "minOpenclaw": "1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

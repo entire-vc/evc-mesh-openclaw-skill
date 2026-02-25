@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "evc-mesh": {
+      "transport": "sse",
+      "url": "${MESH_MCP_SSE_URL:-http://localhost:8081/mcp/sse}",
+      "headers": {
+        "Authorization": "Bearer ${MESH_AGENT_KEY}"
+      }
+    }
+  }
+}
