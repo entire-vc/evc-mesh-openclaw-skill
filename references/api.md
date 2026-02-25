@@ -185,6 +185,12 @@ GET /agents/{agent_id}
 Response: Agent { id, workspace_id, name, slug, agent_type, status, last_heartbeat, current_task_id, total_tasks_completed, total_errors }
 ```
 
+### Get Current Agent (Me)
+```
+GET /agents/me
+Response: Agent { id, workspace_id, name, slug, agent_type, status, last_heartbeat, current_task_id, total_tasks_completed, total_errors }
+```
+
 ### Heartbeat
 ```
 POST /agents/heartbeat

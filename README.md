@@ -41,6 +41,9 @@ Add to `~/.openclaw/openclaw.json`:
 export MESH_API_URL="https://mesh.entire.host"
 export MESH_AGENT_KEY="agk_your_workspace_key"
 
+# Get your agent profile (ID, workspace_id)
+bash scripts/whoami.sh
+
 # Check agent status
 bash scripts/heartbeat.sh online
 
@@ -64,6 +67,7 @@ bash scripts/add-comment.sh <task_id> "Starting implementation"
 
 | Script | Purpose |
 |--------|---------|
+| `whoami.sh` | Get agent profile (ID, workspace_id, name) |
 | `heartbeat.sh` | Send agent heartbeat (online/busy/error) |
 | `list-projects.sh` | List workspace projects |
 | `get-project.sh` | Get project details |

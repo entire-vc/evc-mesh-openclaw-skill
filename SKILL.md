@@ -56,11 +56,12 @@ bash scripts/move-task.sh <task_id> <done_status_id>
 
 At the beginning of every work session:
 
-1. **Send heartbeat**: `bash scripts/heartbeat.sh online`
-2. **List projects**: `bash scripts/list-projects.sh <workspace_id>`
-3. **Get statuses**: `bash scripts/list-statuses.sh <project_id>` — note the IDs for `todo`, `in_progress`, `done`
-4. **Check assigned tasks**: `bash scripts/list-tasks.sh <project_id> --assignee me`
-5. **Read context**: Check recent comments and activity on your tasks
+1. **Identify yourself**: `bash scripts/whoami.sh` — note your `id` and `workspace_id`
+2. **Send heartbeat**: `bash scripts/heartbeat.sh online`
+3. **List projects**: `bash scripts/list-projects.sh <workspace_id>` (from step 1)
+4. **Get statuses**: `bash scripts/list-statuses.sh <project_id>` — note the IDs for `todo`, `in_progress`, `done`
+5. **Check assigned tasks**: `bash scripts/list-tasks.sh <project_id> --assignee me`
+6. **Read context**: Check recent comments and activity on your tasks
 
 If there are tasks in `in_progress` from a previous session, resume those first.
 If all assigned tasks are `todo`, pick the highest-priority one.
@@ -121,6 +122,7 @@ Agents coordinate through **shared task state** — not direct communication.
 
 | Script | Purpose | Args |
 |--------|---------|------|
+| `whoami.sh` | Get agent profile (id, workspace_id) | (no args) |
 | `heartbeat.sh` | Register agent status | `<status>` (online/busy/error) |
 | `list-projects.sh` | List workspace projects | `<workspace_id>` |
 | `get-project.sh` | Get project details | `<project_id>` |
