@@ -30,8 +30,11 @@ export MESH_AGENT_KEY="agk_your_workspace_key"
 # Send heartbeat (register as online)
 bash scripts/heartbeat.sh online
 
-# List projects in workspace
-bash scripts/list-projects.sh <workspace_id>
+# Auto-discover workspace, projects, statuses
+bash scripts/discover.sh
+
+# Or list projects (auto-resolves workspace from agent key)
+bash scripts/list-projects.sh
 
 # List statuses for a project (to know status IDs)
 bash scripts/list-statuses.sh <project_id>
@@ -56,10 +59,9 @@ bash scripts/move-task.sh <task_id> <done_status_id>
 
 At the beginning of every work session:
 
-1. **Identify yourself**: `bash scripts/whoami.sh` — note your `id` and `workspace_id`
+1. **Discover environment**: `bash scripts/discover.sh --export` — gets agent ID, workspace, projects, statuses in one call
 2. **Send heartbeat**: `bash scripts/heartbeat.sh online`
-3. **List projects**: `bash scripts/list-projects.sh <workspace_id>` (from step 1)
-4. **Get statuses**: `bash scripts/list-statuses.sh <project_id>` — note the IDs for `todo`, `in_progress`, `done`
+3. **(Optional) List agents**: `bash scripts/list-agents.sh` — see other agents in workspace for coordination
 5. **Check assigned tasks**: `bash scripts/my-tasks.sh` — shows all tasks assigned to you
 6. **Read context**: Check recent comments and activity on your tasks
 7. **Check triage inbox**: `bash scripts/list-triage.sh <workspace_id>` — pick up unrouted tasks
@@ -137,7 +139,9 @@ Agents coordinate through **shared task state** — not direct communication.
 | `whoami.sh` | Get agent profile (id, workspace_id) | (no args) |
 | `heartbeat.sh` | Register agent status | `<status>` (online/busy/error) |
 | `my-tasks.sh` | List tasks assigned to me | (no args) |
-| `list-projects.sh` | List workspace projects | `<workspace_id>` |
+| `discover.sh` | Auto-discover workspace, projects, statuses | `[--export] [--json]` |
+| `list-projects.sh` | List workspace projects | `[workspace_id]` (auto-resolves if omitted) |
+| `list-agents.sh` | List agents in workspace | `[workspace_id]` (auto-resolves if omitted) |
 | `get-project.sh` | Get project details | `<project_id>` |
 | `list-statuses.sh` | List project statuses | `<project_id>` |
 | `list-custom-fields.sh` | List custom field definitions | `<project_id>` |
@@ -150,7 +154,7 @@ Agents coordinate through **shared task state** — not direct communication.
 | `assign-task.sh` | Assign/unassign task | `<task_id> <agent_id> \| --unassign` |
 | `add-comment.sh` | Add comment to task | `<task_id> <content>` |
 | `list-comments.sh` | List task comments | `<task_id>` |
-| `create-subtask.sh` | Create subtask | `<parent_task_id> <title>` |
+| `create-subtask.sh` | Create subtask | `<parent_task_id> <title> [--priority p] [--description d] [--due_date d] [--estimated_hours n] [--labels l1,l2] [--assignee id] [--status id]` |
 | `list-dependencies.sh` | List task dependencies | `<task_id>` |
 | `link-vcs.sh` | Link PR/commit/branch | `<task_id> <type> <external_id> <url> [--title t] [--provider p]` |
 | `list-vcs-links.sh` | List VCS links on task | `<task_id>` |

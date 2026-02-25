@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# List projects in a workspace.
-# Usage: bash list-projects.sh [workspace_id]
+# List agents in a workspace.
+# Usage: bash list-agents.sh [workspace_id]
 #   If workspace_id is omitted, auto-resolves via /agents/me.
 set -euo pipefail
 
@@ -19,5 +19,5 @@ if [[ -z "$WS_ID" ]]; then
   fi
 fi
 
-curl -sf "${MESH_API_URL}/api/v1/workspaces/${WS_ID}/projects" \
+curl -sf "${MESH_API_URL}/api/v1/workspaces/${WS_ID}/agents" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}" | jq .
