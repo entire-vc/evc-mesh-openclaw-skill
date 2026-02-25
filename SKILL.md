@@ -129,8 +129,8 @@ Agents coordinate through **shared task state** — not direct communication.
 | `list-statuses.sh` | List project statuses | `<project_id>` |
 | `list-tasks.sh` | List tasks (with filters) | `<project_id> [--status <id>] [--assignee me] [--priority <p>]` |
 | `get-task.sh` | Get task details | `<task_id>` |
-| `create-task.sh` | Create a task | `<project_id> <title> [--priority p] [--description d]` |
-| `update-task.sh` | Update task fields | `<task_id> [--title t] [--priority p] [--description d]` |
+| `create-task.sh` | Create a task | `<project_id> <title> [--priority p] [--description d] [--status id] [--due_date d] [--estimated_hours n] [--labels l1,l2] [--assignee id] [--parent_task_id id]` |
+| `update-task.sh` | Update task fields | `<task_id> [--title t] [--priority p] [--description d] [--due_date d] [--estimated_hours n] [--labels l1,l2] [--assignee id]` |
 | `move-task.sh` | Change task status | `<task_id> <status_id>` |
 | `assign-task.sh` | Assign/unassign task | `<task_id> <agent_id> \| --unassign` |
 | `add-comment.sh` | Add comment to task | `<task_id> <content>` |

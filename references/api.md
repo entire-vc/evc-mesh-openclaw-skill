@@ -49,14 +49,14 @@ Response: Task {
 ### Create Task
 ```
 POST /projects/{project_id}/tasks
-Body: { title, priority?, description?, status_id?, parent_task_id?, due_date?, labels? }
+Body: { title, priority?, description?, status_id?, parent_task_id?, due_date?, estimated_hours?, labels?, assignee_id?, assignee_type? }
 Response: Task
 ```
 
 ### Update Task
 ```
 PATCH /tasks/{task_id}
-Body: { title?, priority?, description?, assignee_id?, assignee_type?, due_date?, labels? }
+Body: { title?, priority?, description?, assignee_id?, assignee_type?, due_date?, estimated_hours?, labels? }
 Response: Task
 ```
 

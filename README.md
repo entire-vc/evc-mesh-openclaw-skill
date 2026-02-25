@@ -74,8 +74,8 @@ bash scripts/add-comment.sh <task_id> "Starting implementation"
 | `list-statuses.sh` | List project statuses (with IDs and categories) |
 | `list-tasks.sh` | List tasks with optional filters |
 | `get-task.sh` | Get task details |
-| `create-task.sh` | Create a new task |
-| `update-task.sh` | Update task fields |
+| `create-task.sh` | Create a new task (all fields supported) |
+| `update-task.sh` | Update task fields (all fields supported) |
 | `move-task.sh` | Change task status |
 | `assign-task.sh` | Assign or unassign a task |
 | `add-comment.sh` | Add comment to task |
