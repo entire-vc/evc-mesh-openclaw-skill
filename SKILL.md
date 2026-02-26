@@ -181,3 +181,9 @@ Agents coordinate through **shared task state** — not direct communication.
 | `get-activity.sh` | Get task activity log | `<task_id>` |
 | `post-update.sh` | Post project status update | `<project_id> <title> <summary> [--status s]` |
 | `list-triage.sh` | List triage inbox tasks | `<workspace_id>` |
+| `get-team.sh` | Get workspace team directory (agents + humans) | `[workspace_id]` (auto-resolves if omitted) |
+| `get-workflow-rules.sh` | Get workflow rules + caller permissions for project | `<project_id>` |
+| `get-assignment-rules.sh` | Get effective assignment rules for project | `<project_id>` |
+| `update-agent-profile.sh` | Update calling agent's profile fields | `[--role r] [--capabilities go,react] [--zone Backend] [--escalation-to id] [--accepts-from id1,id2] [--max-tasks n] [--hours "24/7"] [--description d]` |
+| `import-config.sh` | Import workspace config from YAML file | `<path-to-yaml-file> [workspace_id]` |
+| `export-config.sh` | Export workspace config as YAML | `[workspace_id] [--output file.yaml]` |
