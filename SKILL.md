@@ -23,37 +23,52 @@ the agent key is passed as `X-Agent-Key` header on every request.
 
 ## Quick Start
 
+All scripts live in the `scripts/` directory of this skill. When running from
+an OpenClaw agent, use the **full path** to avoid "command not found" errors:
+
 ```bash
+# Set the skill directory (adjust if installed elsewhere)
+SKILL_DIR="/opt/openclaw/skills/evc-mesh"
+
 export MESH_API_URL="https://mesh.entire.host"
 export MESH_AGENT_KEY="agk_your_workspace_key"
 
 # Send heartbeat (register as online)
-bash scripts/heartbeat.sh online
+bash "$SKILL_DIR/scripts/heartbeat.sh" online
 
 # Auto-discover workspace, projects, statuses
-bash scripts/discover.sh
+bash "$SKILL_DIR/scripts/discover.sh"
 
 # Or list projects (auto-resolves workspace from agent key)
-bash scripts/list-projects.sh
+bash "$SKILL_DIR/scripts/list-projects.sh"
 
 # List statuses for a project (to know status IDs)
-bash scripts/list-statuses.sh <project_id>
+bash "$SKILL_DIR/scripts/list-statuses.sh" <project_id>
 
 # List tasks assigned to you
-bash scripts/list-tasks.sh <project_id> --assignee me
+bash "$SKILL_DIR/scripts/list-tasks.sh" <project_id> --assignee me
 
 # Get task details
-bash scripts/get-task.sh <task_id>
+bash "$SKILL_DIR/scripts/get-task.sh" <task_id>
 
 # Move task to in_progress
-bash scripts/move-task.sh <task_id> <in_progress_status_id>
+bash "$SKILL_DIR/scripts/move-task.sh" <task_id> <in_progress_status_id>
 
 # Add a comment
-bash scripts/add-comment.sh <task_id> "Starting work on this task"
+bash "$SKILL_DIR/scripts/add-comment.sh" <task_id> "Starting work on this task"
+
+# Upload an artifact
+bash "$SKILL_DIR/scripts/upload-artifact.sh" <task_id> "report" "log" ./output.log
+
+# Delete a test task
+bash "$SKILL_DIR/scripts/delete-task.sh" <task_id>
 
 # Move task to done when finished
-bash scripts/move-task.sh <task_id> <done_status_id>
+bash "$SKILL_DIR/scripts/move-task.sh" <task_id> <done_status_id>
 ```
+
+> **Tip:** You can also `cd "$SKILL_DIR"` first and then use relative paths
+> like `bash scripts/heartbeat.sh online`.
 
 ## Session Start Protocol
 
@@ -84,9 +99,9 @@ Priority order: `urgent` > `high` > `medium` > `low`.
 
 - Post progress comments at meaningful checkpoints (not every action)
 - If the task is larger than expected, create subtasks: `bash scripts/create-subtask.sh <task_id> "Subtask title"`
-- Upload artifacts when files are ready: `bash scripts/upload-artifact.sh <task_id> <name> <type> <file_or_content>`
-- Link PRs, commits, or branches: `bash scripts/link-vcs.sh <task_id> pr <pr_number> <pr_url> --title "Fix auth bug"`
-- Check custom fields if needed: `bash scripts/list-custom-fields.sh <project_id>`
+- Upload artifacts when files are ready: `bash "$SKILL_DIR/scripts/upload-artifact.sh" <task_id> <name> <type> <file_or_content>`
+- Link PRs, commits, or branches: `bash "$SKILL_DIR/scripts/link-vcs.sh" <task_id> pr <pr_number> <pr_url> --title "Fix auth bug"`
+- Check custom fields if needed: `bash "$SKILL_DIR/scripts/list-custom-fields.sh" <project_id>`
 
 ## Task Completion Protocol
 
@@ -160,6 +175,7 @@ Agents coordinate through **shared task state** — not direct communication.
 | `list-vcs-links.sh` | List VCS links on task | `<task_id>` |
 | `upload-artifact.sh` | Upload artifact | `<task_id> <name> <type> <file_or_content>` |
 | `list-artifacts.sh` | List task artifacts | `<task_id>` |
+| `delete-task.sh` | Delete a task | `<task_id>` |
 | `publish-event.sh` | Publish event to bus | `<project_id> <event_type> <subject> <payload_json>` |
 | `list-events.sh` | List project events | `<project_id>` |
 | `get-activity.sh` | Get task activity log | `<task_id>` |
