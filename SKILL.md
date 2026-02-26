@@ -15,7 +15,7 @@ description: >
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `MESH_API_URL` | Yes | Base URL of the Mesh API (e.g. `https://mesh.entire.host`) |
+| `MESH_API_URL` | Yes | Base URL of the Mesh API (e.g. `https://your-mesh-instance.example.com`) |
 | `MESH_AGENT_KEY` | Yes | Agent API key (`agk_workspace_...`) from Mesh admin panel |
 
 All scripts read these from the environment. No separate auth step needed —
@@ -30,7 +30,7 @@ an OpenClaw agent, use the **full path** to avoid "command not found" errors:
 # Set the skill directory (adjust if installed elsewhere)
 SKILL_DIR="/opt/openclaw/skills/evc-mesh"
 
-export MESH_API_URL="https://mesh.entire.host"
+export MESH_API_URL="https://your-mesh-instance.example.com"
 export MESH_AGENT_KEY="agk_your_workspace_key"
 
 # Send heartbeat (register as online)

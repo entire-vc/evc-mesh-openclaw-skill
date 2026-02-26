@@ -26,7 +26,7 @@ Add to `~/.openclaw/openclaw.json`:
     "entries": {
       "evc-mesh": {
         "env": {
-          "MESH_API_URL": "https://mesh.entire.host",
+          "MESH_API_URL": "https://your-mesh-instance.example.com",
           "MESH_AGENT_KEY": "agk_your_workspace_key"
         }
       }
@@ -38,7 +38,7 @@ Add to `~/.openclaw/openclaw.json`:
 ## Quick Start
 
 ```bash
-export MESH_API_URL="https://mesh.entire.host"
+export MESH_API_URL="https://your-mesh-instance.example.com"
 export MESH_AGENT_KEY="agk_your_workspace_key"
 
 # Get your agent profile (ID, workspace_id)

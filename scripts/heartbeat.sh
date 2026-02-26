@@ -6,7 +6,7 @@ set -euo pipefail
 
 source "$(dirname "$0")/_lib.sh"
 
-: "${MESH_API_URL:?Set MESH_API_URL (e.g. https://mesh.entire.host)}"
+: "${MESH_API_URL:?Set MESH_API_URL (e.g. https://your-mesh-instance.example.com)}"
 : "${MESH_AGENT_KEY:?Set MESH_AGENT_KEY (e.g. agk_workspace_...)}"
 
 STATUS="${1:?Usage: heartbeat.sh <online|busy|error>}"
