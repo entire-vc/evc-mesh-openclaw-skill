@@ -11,6 +11,8 @@ description: >
 
 # EVC Mesh Task Management
 
+OpenClaw skill for [EVC Mesh](https://github.com/entire-vc/evc-mesh) — a task management platform for coordinating humans and AI agents. Source: [evc-mesh-openclaw-skill](https://github.com/entire-vc/evc-mesh-openclaw-skill).
+
 ## Environment Variables
 
 | Variable | Required | Description |
