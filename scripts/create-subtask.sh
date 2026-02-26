@@ -10,6 +10,8 @@
 #   --status <status_id>     Status ID (default: project default)
 set -euo pipefail
 
+source "$(dirname "$0")/_lib.sh"
+
 : "${MESH_API_URL:?Set MESH_API_URL}"
 : "${MESH_AGENT_KEY:?Set MESH_AGENT_KEY}"
 
@@ -39,7 +41,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Get parent task to find project_id
-PARENT=$(curl -sf "${MESH_API_URL}/api/v1/tasks/${PARENT_ID}" \
+PARENT=$(mesh_curl "${MESH_API_URL}/api/v1/tasks/${PARENT_ID}" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}")
 PROJ_ID=$(echo "$PARENT" | jq -r '.project_id')
 
@@ -66,7 +68,7 @@ BODY=$(jq -n \
    (if $labels != "" then {labels: ($labels | split(","))} else {} end) +
    (if $assignee != "" then {assignee_id: $assignee, assignee_type: "agent"} else {} end)')
 
-curl -sf -X POST "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/tasks" \
+mesh_curl -X POST "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/tasks" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}" \
   -H "Content-Type: application/json" \
   -d "$BODY" | jq .

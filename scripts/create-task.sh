@@ -11,6 +11,8 @@
 #   --parent_task_id <id>    Parent task ID (creates subtask)
 set -euo pipefail
 
+source "$(dirname "$0")/_lib.sh"
+
 : "${MESH_API_URL:?Set MESH_API_URL}"
 : "${MESH_AGENT_KEY:?Set MESH_AGENT_KEY}"
 
@@ -60,7 +62,7 @@ BODY=$(jq -n \
    (if $assignee != "" then {assignee_id: $assignee, assignee_type: "agent"} else {} end) +
    (if $parent_task_id != "" then {parent_task_id: $parent_task_id} else {} end)')
 
-curl -sf -X POST "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/tasks" \
+mesh_curl -X POST "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/tasks" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}" \
   -H "Content-Type: application/json" \
   -d "$BODY" | jq .

@@ -3,10 +3,12 @@
 # Usage: bash list-vcs-links.sh <task_id>
 set -euo pipefail
 
+source "$(dirname "$0")/_lib.sh"
+
 : "${MESH_API_URL:?Set MESH_API_URL}"
 : "${MESH_AGENT_KEY:?Set MESH_AGENT_KEY}"
 
 TASK_ID="${1:?Usage: list-vcs-links.sh <task_id>}"
 
-curl -sf "${MESH_API_URL}/api/v1/tasks/${TASK_ID}/vcs-links" \
+mesh_curl "${MESH_API_URL}/api/v1/tasks/${TASK_ID}/vcs-links" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}" | jq .

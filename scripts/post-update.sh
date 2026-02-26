@@ -3,6 +3,8 @@
 # Usage: bash post-update.sh <project_id> <title> <summary> [--status on_track|at_risk|off_track|completed]
 set -euo pipefail
 
+source "$(dirname "$0")/_lib.sh"
+
 : "${MESH_API_URL:?Set MESH_API_URL}"
 : "${MESH_AGENT_KEY:?Set MESH_AGENT_KEY}"
 
@@ -26,7 +28,7 @@ BODY=$(jq -n \
   --arg status "$STATUS" \
   '{title: $title, summary: $summary, status: $status}')
 
-curl -sf -X POST "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/updates" \
+mesh_curl -X POST "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/updates" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}" \
   -H "Content-Type: application/json" \
   -d "$BODY" | jq .

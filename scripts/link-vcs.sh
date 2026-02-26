@@ -4,6 +4,8 @@
 # Types: pr, commit, branch
 set -euo pipefail
 
+source "$(dirname "$0")/_lib.sh"
+
 : "${MESH_API_URL:?Set MESH_API_URL}"
 : "${MESH_AGENT_KEY:?Set MESH_AGENT_KEY}"
 
@@ -32,7 +34,7 @@ BODY=$(jq -n \
   --arg provider "$PROVIDER" \
   '{link_type: $link_type, external_id: $external_id, url: $url, provider: $provider} + (if $title != "" then {title: $title} else {} end)')
 
-curl -sf -X POST "${MESH_API_URL}/api/v1/tasks/${TASK_ID}/vcs-links" \
+mesh_curl -X POST "${MESH_API_URL}/api/v1/tasks/${TASK_ID}/vcs-links" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}" \
   -H "Content-Type: application/json" \
   -d "$BODY" | jq .

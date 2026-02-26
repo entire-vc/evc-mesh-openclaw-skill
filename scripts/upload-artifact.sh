@@ -5,6 +5,8 @@
 # Types: code, log, report, file, data
 set -euo pipefail
 
+source "$(dirname "$0")/_lib.sh"
+
 : "${MESH_API_URL:?Set MESH_API_URL}"
 : "${MESH_AGENT_KEY:?Set MESH_AGENT_KEY}"
 
@@ -26,7 +28,7 @@ if [[ ! -f "$FILE_OR_STDIN" ]]; then
   exit 1
 fi
 
-curl -sf -X POST "${MESH_API_URL}/api/v1/tasks/${TASK_ID}/artifacts" \
+mesh_curl -X POST "${MESH_API_URL}/api/v1/tasks/${TASK_ID}/artifacts" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}" \
   -F "name=${NAME}" \
   -F "artifact_type=${ATYPE}" \

@@ -4,6 +4,8 @@
 # Event types: summary, context_update, error, custom
 set -euo pipefail
 
+source "$(dirname "$0")/_lib.sh"
+
 : "${MESH_API_URL:?Set MESH_API_URL}"
 : "${MESH_AGENT_KEY:?Set MESH_AGENT_KEY}"
 
@@ -18,7 +20,7 @@ BODY=$(jq -n \
   --argjson payload "$PAYLOAD" \
   '{event_type: $event_type, subject: $subject, payload: $payload}')
 
-curl -sf -X POST "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/events" \
+mesh_curl -X POST "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/events" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}" \
   -H "Content-Type: application/json" \
   -d "$BODY" | jq .

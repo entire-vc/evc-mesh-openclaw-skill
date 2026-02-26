@@ -7,6 +7,8 @@
 #   (default)  Print human-readable summary
 set -euo pipefail
 
+source "$(dirname "$0")/_lib.sh"
+
 : "${MESH_API_URL:?Set MESH_API_URL}"
 : "${MESH_AGENT_KEY:?Set MESH_AGENT_KEY}"
 
@@ -20,7 +22,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Step 1: Get agent profile -> workspace_id
-AGENT=$(curl -sf "${MESH_API_URL}/api/v1/agents/me" \
+AGENT=$(mesh_curl "${MESH_API_URL}/api/v1/agents/me" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}")
 
 AGENT_ID=$(echo "$AGENT" | jq -r '.id')
@@ -33,7 +35,7 @@ if [[ -z "$WS_ID" || "$WS_ID" == "null" ]]; then
 fi
 
 # Step 2: List projects
-PROJECTS=$(curl -sf "${MESH_API_URL}/api/v1/workspaces/${WS_ID}/projects" \
+PROJECTS=$(mesh_curl "${MESH_API_URL}/api/v1/workspaces/${WS_ID}/projects" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}")
 
 PROJECT_COUNT=$(echo "$PROJECTS" | jq '.total_count // (.items | length)')
@@ -44,7 +46,7 @@ ENRICHED=$(echo "$PROJECTS" | jq -c '.items[]' | while read -r proj; do
   PROJ_NAME=$(echo "$proj" | jq -r '.name')
   PROJ_SLUG=$(echo "$proj" | jq -r '.slug')
 
-  STATUSES=$(curl -sf "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/statuses" \
+  STATUSES=$(mesh_curl "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/statuses" \
     -H "X-Agent-Key: ${MESH_AGENT_KEY}" 2>/dev/null || echo '[]')
 
   echo "$proj" | jq --argjson statuses "$STATUSES" '. + {statuses: $statuses}'

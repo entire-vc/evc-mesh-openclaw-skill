@@ -3,6 +3,8 @@
 # Usage: bash list-tasks.sh <project_id> [--status <status_id>] [--assignee me] [--priority <p>]
 set -euo pipefail
 
+source "$(dirname "$0")/_lib.sh"
+
 : "${MESH_API_URL:?Set MESH_API_URL}"
 : "${MESH_AGENT_KEY:?Set MESH_AGENT_KEY}"
 
@@ -32,5 +34,5 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-curl -sf "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/tasks?${PARAMS}" \
+mesh_curl "${MESH_API_URL}/api/v1/projects/${PROJ_ID}/tasks?${PARAMS}" \
   -H "X-Agent-Key: ${MESH_AGENT_KEY}" | jq .
