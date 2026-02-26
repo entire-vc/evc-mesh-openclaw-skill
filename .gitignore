@@ -6,3 +6,8 @@ coverage/
 .env.*
 !.env.example
 .DS_Store
+*.pem
+*.key
+*.secret
+credentials.json
+.claude/
