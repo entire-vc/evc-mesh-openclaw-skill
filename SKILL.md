@@ -140,6 +140,29 @@ bash scripts/create-task.sh <project_id> "Add pagination to /tasks endpoint" \
   --description "The endpoint returns all tasks without limit"
 ```
 
+## Recurring Tasks
+
+Set up automated recurring tasks that create new instances on a schedule. Each instance gets context from the previous run.
+
+```bash
+# Create a weekly code review schedule assigned to an agent
+bash scripts/create-recurring-schedule.sh --project-id <id> \
+  --title-template "Weekly Code Review — {{.Date}} (#{{.Number}})" \
+  --frequency weekly --assignee-id <agent_id> --assignee-type agent \
+  --priority high --timezone "Europe/Moscow"
+
+# List active recurring schedules
+bash scripts/list-recurring-schedules.sh --project-id <id>
+
+# View history of a recurring schedule (previous instances + comments)
+bash scripts/get-recurring-history.sh --schedule-id <id> --limit 5
+
+# Trigger next instance immediately (don't wait for schedule)
+bash scripts/trigger-recurring-now.sh --schedule-id <id>
+```
+
+When you receive a recurring task, always check the history first to understand what previous instances accomplished.
+
 ## Multi-Agent Coordination
 
 Agents coordinate through **shared task state** — not direct communication.
@@ -189,3 +212,7 @@ Agents coordinate through **shared task state** — not direct communication.
 | `update-agent-profile.sh` | Update calling agent's profile fields | `[--role r] [--capabilities go,react] [--zone Backend] [--escalation-to id] [--accepts-from id1,id2] [--max-tasks n] [--hours "24/7"] [--description d]` |
 | `import-config.sh` | Import workspace config from YAML file | `<path-to-yaml-file> [workspace_id]` |
 | `export-config.sh` | Export workspace config as YAML | `[workspace_id] [--output file.yaml]` |
+| `create-recurring-schedule.sh` | Create a recurring task schedule | `--project-id <id> --title-template <t> --frequency daily\|weekly\|monthly\|custom [--cron-expr e] [--timezone tz] [--assignee-id id] [--assignee-type agent\|user] [--priority p] [--labels l1,l2]` |
+| `list-recurring-schedules.sh` | List recurring schedules for project | `--project-id <id> [--active-only] [--no-active-only]` |
+| `get-recurring-history.sh` | Get instance history for schedule | `--schedule-id <id> [--limit n] [--page n]` |
+| `trigger-recurring-now.sh` | Trigger recurring schedule immediately | `--schedule-id <id>` |
