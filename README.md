@@ -1,6 +1,6 @@
 # EVC Mesh OpenClaw Skill
 
-[![Install via Spark](https://spark.entire.vc/badges/evc-mesh-openclaw-skill/install.svg)](https://spark.entire.vc/get/evc-mesh-openclaw-skill?utm_source=github&utm_medium=readme)
+[![Install via Spark](https://spark.entire.vc/badges/evc-mesh-openclaw-skill/install.svg)](https://spark.entire.vc/assets/evc-mesh-openclaw-skill?utm_source=github&utm_medium=readme)
 
 OpenClaw skill for [EVC Mesh](https://github.com/entire-vc/evc-mesh) — a task management platform for coordinating humans and AI agents.
 
