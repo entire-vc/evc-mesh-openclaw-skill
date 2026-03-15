@@ -72,21 +72,50 @@ bash "$SKILL_DIR/scripts/move-task.sh" <task_id> <done_status_id>
 > **Tip:** You can also `cd "$SKILL_DIR"` first and then use relative paths
 > like `bash scripts/heartbeat.sh online`.
 
-## Session Start Protocol
+## Agent Context Protocol (ACP) — Session Start
 
-At the beginning of every work session:
+At the beginning of **every** work session, follow these 7 steps in order.
+This ensures you have full project context before making decisions.
 
-1. **Discover environment**: `bash scripts/discover.sh --export` — gets agent ID, workspace, projects, statuses in one call
-2. **Send heartbeat**: `bash scripts/heartbeat.sh online`
-3. **(Optional) List agents**: `bash scripts/list-agents.sh` — see other agents in workspace for coordination
-5. **Check assigned tasks**: `bash scripts/my-tasks.sh` — shows all tasks assigned to you
-6. **Read context**: Check recent comments and activity on your tasks
-7. **Check triage inbox**: `bash scripts/list-triage.sh <workspace_id>` — pick up unrouted tasks
+1. **Identity**: `bash scripts/whoami.sh` — know your ID, role, capabilities
+2. **Discover**: `bash scripts/discover.sh --export` — workspace, projects, statuses
+3. **Project knowledge**: `bash scripts/get-project-knowledge.sh <project_id>` — load accumulated decisions, conventions, context from project memory
+4. **Rules**: `bash scripts/get-workflow-rules.sh <project_id>` — understand workflow constraints
+5. **Heartbeat**: `bash scripts/heartbeat.sh online`
+6. **My tasks**: `bash scripts/my-tasks.sh` — check assigned work
+7. **(Optional)** `bash scripts/list-triage.sh <workspace_id>` — pick up unrouted tasks
 
 If there are tasks in `in_progress` from a previous session, resume those first.
 If all assigned tasks are `todo`, pick the highest-priority one.
 
 Priority order: `urgent` > `high` > `medium` > `low`.
+
+### Memory: reading and writing knowledge
+
+During work, use the memory system to persist and retrieve project knowledge:
+
+```bash
+# Search for existing knowledge
+bash scripts/recall.sh "API convention" --scope project
+
+# Save a decision or convention
+bash scripts/remember.sh "api-convention" "All REST responses use envelope {data, meta, error}" \
+  --scope project --tags api,convention
+
+# Save a personal note (only visible to you + workspace owner)
+bash scripts/remember.sh "user-preference-language" "Pavel prefers Russian in commit messages" \
+  --scope agent
+
+# Delete outdated knowledge
+bash scripts/forget.sh <memory_id>
+```
+
+### Session End
+
+When finishing a session:
+1. Publish summary: `bash scripts/publish-event.sh <project_id> summary "Session summary" '{"summary": "...", "key_decisions": [...]}'`
+2. Remember decisions: `bash scripts/remember.sh "decision-<slug>" "<what was decided>" --scope project --tags decision`
+3. Heartbeat: `bash scripts/heartbeat.sh online`
 
 ## Task Pickup Protocol
 
@@ -212,6 +241,10 @@ Agents coordinate through **shared task state** — not direct communication.
 | `update-agent-profile.sh` | Update calling agent's profile fields | `[--role r] [--capabilities go,react] [--zone Backend] [--escalation-to id] [--accepts-from id1,id2] [--max-tasks n] [--hours "24/7"] [--description d]` |
 | `import-config.sh` | Import workspace config from YAML file | `<path-to-yaml-file> [workspace_id]` |
 | `export-config.sh` | Export workspace config as YAML | `[workspace_id] [--output file.yaml]` |
+| `remember.sh` | Save knowledge to memory (UPSERT by key) | `<key> <content> [--scope s] [--project-id id] [--tags t1,t2]` |
+| `recall.sh` | Search project memory (full-text) | `<query> [--scope s] [--project-id id] [--limit n]` |
+| `get-project-knowledge.sh` | Get all accumulated project knowledge | `<project_id>` |
+| `forget.sh` | Delete a memory entry | `<memory_id>` |
 | `create-recurring-schedule.sh` | Create a recurring task schedule | `--project-id <id> --title-template <t> --frequency daily\|weekly\|monthly\|custom [--cron-expr e] [--timezone tz] [--assignee-id id] [--assignee-type agent\|user] [--priority p] [--labels l1,l2]` |
 | `list-recurring-schedules.sh` | List recurring schedules for project | `--project-id <id> [--active-only] [--no-active-only]` |
 | `get-recurring-history.sh` | Get instance history for schedule | `--schedule-id <id> [--limit n] [--page n]` |
