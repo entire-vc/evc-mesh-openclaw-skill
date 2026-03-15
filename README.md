@@ -150,6 +150,7 @@ bash scripts/heartbeat.sh online
 | `list-comments.sh` | List task comments | `<task_id>` |
 | `upload-artifact.sh` | Upload artifact | `<task_id> <name> <type> <file_or_content>` |
 | `list-artifacts.sh` | List task artifacts | `<task_id>` |
+| `download-artifact.sh` | Download artifact content | `<artifact_id> [--output <file>]` |
 
 ### VCS Links
 

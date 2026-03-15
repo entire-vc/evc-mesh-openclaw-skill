@@ -229,6 +229,7 @@ Agents coordinate through **shared task state** — not direct communication.
 | `list-vcs-links.sh` | List VCS links on task | `<task_id>` |
 | `upload-artifact.sh` | Upload artifact | `<task_id> <name> <type> <file_or_content>` |
 | `list-artifacts.sh` | List task artifacts | `<task_id>` |
+| `download-artifact.sh` | Download artifact content | `<artifact_id> [--output <file>]` |
 | `delete-task.sh` | Delete a task | `<task_id>` |
 | `publish-event.sh` | Publish event to bus | `<project_id> <event_type> <subject> <payload_json>` |
 | `list-events.sh` | List project events | `<project_id>` |
