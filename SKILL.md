@@ -90,6 +90,20 @@ If all assigned tasks are `todo`, pick the highest-priority one.
 
 Priority order: `urgent` > `high` > `medium` > `low`.
 
+### Canonical updates (ACP step 6 — F2 C3)
+
+After step 5 (my-tasks), check for Pavel directives broadcast since your last session:
+
+```bash
+# Fetch all public canonical decisions targeted at you or all agents
+bash scripts/get-canonical-updates.sh --agent <your-slug>
+
+# Fetch decisions since a specific time
+bash scripts/get-canonical-updates.sh --since 2026-06-01T00:00:00Z --agent linus
+```
+
+Skip gracefully if the endpoint returns 404 (server predates F2 C3 deployment).
+
 ### Memory: reading and writing knowledge
 
 During work, use the memory system to persist and retrieve project knowledge:
