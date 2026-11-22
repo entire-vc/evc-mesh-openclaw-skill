@@ -227,4 +227,6 @@ See [references/api.md](references/api.md) for the complete REST API specificati
 
 ## License
 
-[MIT](LICENSE)
+[Apache-2.0](LICENSE)
+
+relicensed from MIT to Apache-2.0 on 2026-11-21

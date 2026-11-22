@@ -3,7 +3,7 @@
 # Visible via get-project-knowledge.sh and get_project_knowledge MCP tool.
 # Usage: bash set-project-knowledge.sh <project-id> <key> <value> [--category <cat>] [--tags tag1,tag2] [--source-url <url>]
 # Examples:
-#   bash set-project-knowledge.sh "$PROJECT_ID" "deploy-url" "https://mesh.entire.host" --category deploy
+#   bash set-project-knowledge.sh "$PROJECT_ID" "deploy-url" "https://example.invalid" --category deploy
 #   bash set-project-knowledge.sh "$PROJECT_ID" "stack-convention" "Go 1.22 + Echo + PostgreSQL 16" --category stack
 #   bash set-project-knowledge.sh "$PROJECT_ID" "ci-trigger" "Push to main triggers CI/CD" --category gotchas --source-url "https://github.com/org/repo/actions"
 set -euo pipefail
